@@ -43,19 +43,19 @@ public class ParticleRenderType implements IParticleRenderType {
 
     @Nonnull
     protected VertexFormat getVertexFormat() {
-        return DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP;
+        return DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP;
     }
 
     @Override
-    public void beginRender(@Nonnull final BufferBuilder buffer, @Nonnull final TextureManager textureManager) {
-        RenderHelper.disableStandardItemLighting();
-        textureManager.bindTexture(this.texture);
+    public void begin(@Nonnull final BufferBuilder buffer, @Nonnull final TextureManager textureManager) {
+        RenderHelper.turnOff();
+        textureManager.bind(this.texture);
         buffer.begin(GL11.GL_QUADS, getVertexFormat());
     }
 
     @Override
-    public void finishRender(@Nonnull final Tessellator tessellator) {
-        tessellator.draw();
+    public void end(@Nonnull final Tessellator tessellator) {
+        tessellator.end();
     }
 
     @Override

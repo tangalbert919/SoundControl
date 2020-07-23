@@ -42,7 +42,7 @@ public class LoopingSoundInstance extends WrappedSoundInstance {
     }
 
     @Override
-    public boolean canRepeat() {
+    public boolean isLooping() {
         // ASM is used to increase the buffer size 16x.  Reason is the loop code in the sound engine loops on cached
         // buffers, meaning the entire sound has to be loaded.  If for some reason this breaks you will get a choppy
         // termination before restarting the loop.
@@ -50,7 +50,7 @@ public class LoopingSoundInstance extends WrappedSoundInstance {
     }
 
     @Override
-    public int getRepeatDelay() {
+    public int getDelay() {
         return 0;
     }
 
@@ -80,7 +80,7 @@ public class LoopingSoundInstance extends WrappedSoundInstance {
     }
 
     @Override
-    public AttenuationType getAttenuationType() {
+    public AttenuationType getAttenuation() {
         return AttenuationType.LINEAR;
     }
 
@@ -88,7 +88,7 @@ public class LoopingSoundInstance extends WrappedSoundInstance {
     @Nonnull
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .addValue(getSoundLocation().toString())
+                .addValue(getLocation().toString())
                 .addValue(getSoundCategory().toString())
                 .addValue(getState().toString())
                 .add("v", getVolume())

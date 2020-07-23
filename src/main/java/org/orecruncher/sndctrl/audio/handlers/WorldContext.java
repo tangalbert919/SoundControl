@@ -24,7 +24,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -61,7 +60,7 @@ public final class WorldContext {
      * Reference to the player's world that does caching
      */
     @Nullable
-    public final IEnviromentBlockReader world;
+    public final EnvironmentBlockReader world;
     /**
      * Position of the player.
      */
@@ -102,12 +101,12 @@ public final class WorldContext {
             this.worldReader = world;
             this.world = new EnvironmentBlockReader(world);
             this.isPrecipitating = world.isRaining();
-            this.playerPosition = this.player.getPositionVec();
+            this.playerPosition = this.player.getCommandSenderWorldPosition();
             this.playerEyePosition = this.player.getEyePosition(1F);
             this.playerPos = new BlockPos(this.playerPosition);
             this.playerEyePos = new BlockPos(this.playerEyePosition);
 
-            final Fluid fs = this.player.world.getFluidState(this.playerEyePos).getFluid();
+            final Fluid fs = this.player.getCommandSenderWorld().getFluidState(this.playerEyePos).getType();
             final ResourceLocation name = fs.getRegistryName();
             if (name != null)
                 this.auralDampening = AudioEffectLibrary.getFluidCoeffcient(name);

@@ -33,8 +33,8 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public abstract class BaseParticle extends Particle {
 
-    protected static final EntityRendererManager manager = GameUtils.getMC().getRenderManager();
-    protected static final FontRenderer font = GameUtils.getMC().fontRenderer;
+    protected static final EntityRendererManager manager = GameUtils.getMC().getEntityRenderDispatcher();
+    protected static final FontRenderer font = GameUtils.getMC().font;
     protected static final Random RANDOM = XorShiftRandom.current();
 
     protected BaseParticle(@Nonnull final World worldIn, final double posXIn, final double posYIn,
@@ -45,18 +45,6 @@ public abstract class BaseParticle extends Particle {
     public BaseParticle(@Nonnull final World worldIn, final double xCoordIn, final double yCoordIn,
                         final double zCoordIn, final double xSpeedIn, final double ySpeedIn, final double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-    }
-
-    protected double interpX() {
-        return Particle.interpPosX;
-    }
-
-    protected double interpY() {
-        return Particle.interpPosY;
-    }
-
-    protected double interpZ() {
-        return Particle.interpPosZ;
     }
 
 }

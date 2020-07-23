@@ -30,18 +30,18 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public final class Localization {
 
-    private static final Locale locale = LanguageManager.CURRENT_LOCALE;
+    private static final Locale locale = LanguageManager.LOCALE;
 
     private Localization() {
     }
 
     @Nonnull
     public static String format(@Nonnull final String fmt, @Nullable final Object... args) {
-        return I18n.format(fmt, args);
+        return I18n.get(fmt, args);
     }
 
     @Nonnull
     public static String load(@Nonnull final String fmt) {
-        return locale.translateKeyPrivate(fmt);
+        return locale.getOrDefault(fmt);
     }
 }

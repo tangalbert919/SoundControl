@@ -34,7 +34,7 @@ public class WeatherVariables extends VariableSet<IWeatherVariables> implements 
     private final LazyVariable<Float> temperature = new LazyVariable<>(() -> {
         if (GameUtils.isInGame()) {
             final World world = GameUtils.getWorld();
-            final BlockPos pos = GameUtils.getPlayer().getPosition();
+            final BlockPos pos = GameUtils.getPlayer().getCommandSenderBlockPosition();
             return WorldUtils.getTemperatureAt(world, pos);
         }
         return 0F;

@@ -61,7 +61,7 @@ public class BlockStateProperties {
     public boolean matches(@Nonnull final BlockState state) {
         try {
             for (final Map.Entry<IProperty<?>, Comparable<?>> kvp : this.props.entrySet()) {
-                final Comparable<?> comp = state.get(kvp.getKey());
+                final Comparable<?> comp = state.getValue(kvp.getKey());
                 if (!comp.equals(kvp.getValue()))
                     return false;
             }

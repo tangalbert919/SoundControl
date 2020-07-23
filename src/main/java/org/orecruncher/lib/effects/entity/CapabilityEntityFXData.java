@@ -62,8 +62,8 @@ public class CapabilityEntityFXData {
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<Entity> event) {
-			final World world = event.getObject().getEntityWorld();
-			if (world.isRemote && event.getObject() instanceof LivingEntity) {
+			final World world = event.getObject().level;
+			if (world.isClientSide() && event.getObject() instanceof LivingEntity) {
 				final EntityFXData info = new EntityFXData();
 				event.addCapability(CAPABILITY_ID, createProvider(info));
 			}

@@ -221,13 +221,13 @@ public final class AudioEngine {
         processTerminalSounds();
 
         // Generate diagnostics if needed.
-        if (processDiagnostics() && Minecraft.getInstance().gameSettings.showDebugInfo) {
+        if (processDiagnostics() && Minecraft.getInstance().options.renderDebug) {
             diagnostics = new ArrayList<>(16);
             diagnostics.add(String.format(FMT_DBG_SOUND_SYSTEM, SoundUtils.getTotalPlaying(), SoundUtils.getMaxSounds()));
             diagnostics.add(String.format(FMT_DBG_TRACKED, playingSounds.size()));
 
             playing.keySet().stream()
-                    .map(s -> s.getSound().getSoundLocation())
+                    .map(s -> s.getSound().getLocation())
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                     .entrySet().stream()
                     .map(e -> String.format(FMT_DBG_SOUND, e.getKey().toString(), e.getValue()))

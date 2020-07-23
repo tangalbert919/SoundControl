@@ -35,7 +35,7 @@ public class PlayerVariables extends VariableSet<IPlayerVariables> implements IP
     private final LazyVariable<Boolean> isSuffocating = new LazyVariable<>(() -> {
         if (GameUtils.isInGame()) {
             final PlayerEntity player = GameUtils.getPlayer();
-            return !player.isCreative() && player.getAir() < 0;
+            return !player.isCreative() && player.getAirSupply() < 0;
         }
         return false;
     });
@@ -43,7 +43,7 @@ public class PlayerVariables extends VariableSet<IPlayerVariables> implements IP
         if (GameUtils.isInGame()) {
             final World world = GameUtils.getWorld();
             final PlayerEntity player = GameUtils.getPlayer();
-            return world.canBlockSeeSky(player.getPosition().add(0, 2, 0));
+            return world.canSeeSky(player.getCommandSenderBlockPosition().offset(0, 2, 0));
         }
         return false;
     });
@@ -51,8 +51,8 @@ public class PlayerVariables extends VariableSet<IPlayerVariables> implements IP
         if (GameUtils.isInGame()) {
             final World world = GameUtils.getWorld();
             final PlayerEntity player = GameUtils.getPlayer();
-            if (world.canBlockSeeSky(player.getPosition().add(0, 2, 0)))
-                return WorldUtils.getTopSolidOrLiquidBlock(world, player.getPosition()).getY() <= player.getPosition().getY();
+            if (world.canSeeSky(player.getCommandSenderBlockPosition().offset(0, 2, 0)))
+                return WorldUtils.getTopSolidOrLiquidBlock(world, player.getCommandSenderBlockPosition()).getY() <= player.getCommandSenderBlockPosition().getY();
         }
         return false;
     });
@@ -88,24 +88,24 @@ public class PlayerVariables extends VariableSet<IPlayerVariables> implements IP
             assert player != null;
 
             this.isCreative = player.isCreative();
-            this.isBurning = player.isBurning();
-            this.isFlying = player.isAirBorne;
+            this.isBurning = player.isOnFire();
+            this.isFlying = player.isFallFlying();
             this.isSprintnig = player.isSprinting();
             this.isInLava = player.isInLava();
             this.isInvisible = player.isInvisible();
-            this.isBlind = player.isPotionActive(Effects.BLINDNESS);
+            this.isBlind = player.hasEffect(Effects.BLINDNESS);
             this.isInWater = player.isInWater();
-            this.isWet = player.isWet();
-            this.isRiding = player.isOnePlayerRiding();
+            this.isWet = player.isInWater();
+            this.isRiding = player.hasOnePlayerPassenger();
             this.isOnGround = player.onGround;
-            this.isMoving = player.distanceWalkedModified != player.prevDistanceWalkedModified;
+            this.isMoving = player.walkDist != player.walkDistO;
             this.health = player.getHealth();
             this.maxHealth = player.getMaxHealth();
-            this.foodLevel = player.getFoodStats().getFoodLevel();
-            this.foodSaturationLevel = player.getFoodStats().getSaturationLevel();
-            this.x = player.posX;
-            this.y = player.posY;
-            this.z = player.posZ;
+            this.foodLevel = player.getFoodData().getFoodLevel();
+            this.foodSaturationLevel = player.getFoodData().getSaturationLevel();
+            this.x = player.getX();
+            this.y = player.getY();
+            this.z = player.getZ();
 
         } else {
 

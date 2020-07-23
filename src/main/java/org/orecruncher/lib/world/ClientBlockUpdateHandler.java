@@ -84,7 +84,7 @@ public final class ClientBlockUpdateHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onWorldLoad(@Nonnull final WorldEvent.Load event) {
-        if (event.getWorld().isRemote()) {
+        if (event.getWorld().isClientSide()) {
             updates.clear();
             interval = 0;
         }
@@ -92,7 +92,7 @@ public final class ClientBlockUpdateHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
-        if (event.getWorld().isRemote()) {
+        if (event.getWorld().isClientSide()) {
             updates.clear();
             interval = 0;
         }

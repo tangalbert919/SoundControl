@@ -92,8 +92,8 @@ public final class MusicFader {
         // MUSIC category to be re-evaluated, and the getClampedVolume() override will
         // scale accordingly.
         if (Float.compare(oldScale, currentScale) != 0) {
-            final float mcScale = GameUtils.getGameSettings().getSoundLevel(SoundCategory.MUSIC);
-            GameUtils.getSoundHander().setSoundLevel(SoundCategory.MUSIC, mcScale);
+            final float mcScale = GameUtils.getGameSettings().getSoundSourceVolume(SoundCategory.MUSIC);
+            GameUtils.getSoundHander().updateSourceVolume(SoundCategory.MUSIC, mcScale);
         }
     }
 

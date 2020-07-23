@@ -81,9 +81,9 @@ public final class WorldUtils {
             TEMP = (world, pos) -> world.getBiome(pos).getTemperature(pos);
 
         // Place holder for future
-        RAIN_STRENGTH = World::getRainStrength;
+        RAIN_STRENGTH = World::getRainLevel;
         RAIN_OCCURING = World::isRaining;
-        THUNDER_STRENGTH = World::getThunderStrength;
+        THUNDER_STRENGTH = World::getThunderLevel;
         THUNDER_OCCURING = World::isThundering;
     }
 
@@ -122,7 +122,7 @@ public final class WorldUtils {
      */
     public static boolean isSolid(@Nonnull final IBlockReader world, @Nonnull final BlockPos pos, @Nonnull final Direction dir) {
         final BlockState state = world.getBlockState(pos);
-        return Block.doesSideFillSquare(state.getCollisionShape(world, pos, ISelectionContext.dummy()),dir);
+        return Block.isFaceFull(state.getCollisionShape(world, pos, ISelectionContext.empty()),dir);
     }
 
     /**
@@ -137,7 +137,7 @@ public final class WorldUtils {
      */
     public static boolean isBlockSolid(@Nonnull final IBlockReader world, @Nonnull final BlockPos pos) {
         final BlockState state = world.getBlockState(pos);
-        return state.isSolid();
+        return state.canOcclude();
     }
 
     /**
@@ -199,11 +199,11 @@ public final class WorldUtils {
 
     @Nonnull
     public static BlockPos getPrecipitationHeight(@Nonnull final IWorldReader world, @Nonnull final BlockPos pos) {
-        return world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
+        return world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, pos);
     }
 
     public static boolean hasVoidPartiles(@Nonnull final World world) {
-        return world.getWorldType() != WorldType.FLAT && world.getDimension().hasSkyLight();
+        return world.getGeneratorType() != WorldType.FLAT && world.getDimension().isHasSkyLight();
     }
 
 }

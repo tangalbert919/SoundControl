@@ -45,7 +45,7 @@ public final class GameUtils {
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public static ClientWorld getWorld() {
-        return getMC().world;
+        return getMC().level;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -57,18 +57,18 @@ public final class GameUtils {
     @OnlyIn(Dist.CLIENT)
     @Nonnull
     public static GameSettings getGameSettings() {
-        return getMC().gameSettings;
+        return getMC().options;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static boolean displayDebug() {
-        return getGameSettings().showDebugInfo;
+        return getGameSettings().renderDebug;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Nonnull
     public static SoundHandler getSoundHander() {
-        return getMC().getSoundHandler();
+        return getMC().getSoundManager();
     }
 
     @OnlyIn(Dist.CLIENT)

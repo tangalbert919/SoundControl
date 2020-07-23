@@ -47,7 +47,7 @@ public class RayTraceIterator implements Iterator<BlockRayTraceResult> {
     }
 
     private void doTrace() {
-        if (this.hitResult != null && this.hitResult.getPos().equals(this.targetBlock)) {
+        if (this.hitResult != null && this.hitResult.getBlockPos().equals(this.targetBlock)) {
             this.hitResult = null;
         } else {
             this.hitResult = this.traceContext.trace();
@@ -65,7 +65,7 @@ public class RayTraceIterator implements Iterator<BlockRayTraceResult> {
         if (this.hitResult == null || this.hitResult.getType() == RayTraceResult.Type.MISS)
             throw new IllegalStateException("No more blocks in trace");
         final BlockRayTraceResult result = this.hitResult;
-        this.traceContext.start = this.hitResult.getHitVec().add(this.normal);
+        this.traceContext.start = this.hitResult.getLocation().add(this.normal);
         doTrace();
         return result;
     }

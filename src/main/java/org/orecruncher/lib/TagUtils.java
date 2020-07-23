@@ -89,11 +89,11 @@ public final class TagUtils {
 
             ForgeUtils.getEnabledResourcePacks()
                     .stream()
-                    .map(ResourcePackInfo::getResourcePack)
-                    .forEach(resourceManager::addResourcePack);
+                    .map(ResourcePackInfo::open)
+                    .forEach(resourceManager::add);
 
-            final Map<ResourceLocation, Tag.Builder<T>> mapping = tags.reload(resourceManager, ForkJoinPool.commonPool()).get();
-            tags.registerAll(mapping);
+            final Map<ResourceLocation, Tag.Builder<T>> mapping = tags.prepare(resourceManager, ForkJoinPool.commonPool()).get();
+            tags.load(mapping);
 
         } catch (@Nonnull final Throwable t) {
             Lib.LOGGER.error(t, "Unable to load tags!");
@@ -120,7 +120,7 @@ public final class TagUtils {
 
     @Nullable
     public static Tag<Block> getBlockTag(@Nonnull final ResourceLocation res) {
-        return blockTags.instance().get(res);
+        return blockTags.instance().getTag(res);
     }
 
     @Nullable
@@ -130,6 +130,6 @@ public final class TagUtils {
 
     @Nullable
     public static Tag<Item> getItemTag(@Nonnull final ResourceLocation res) {
-        return itemTags.instance().get(res);
+        return itemTags.instance().getTag(res);
     }
 }

@@ -36,25 +36,26 @@ public final class SoundTypeUtils {
         soundTypeMap.defaultReturnValue("CUSTOM");
 
         soundTypeMap.put(SoundType.WOOD, "WOOD");
-        soundTypeMap.put(SoundType.GROUND, "GROUND");
-        soundTypeMap.put(SoundType.PLANT, "PLANT");
+        soundTypeMap.put(SoundType.GRAVEL, "GRAVEL");
+        soundTypeMap.put(SoundType.GRASS, "GRASS");
         soundTypeMap.put(SoundType.STONE, "STONE");
         soundTypeMap.put(SoundType.METAL, "METAL");
         soundTypeMap.put(SoundType.GLASS, "GLASS");
-        soundTypeMap.put(SoundType.CLOTH, "CLOTH");
+        soundTypeMap.put(SoundType.WOOL, "WOOL");
         soundTypeMap.put(SoundType.SAND, "SAND");
         soundTypeMap.put(SoundType.SNOW, "SNOW");
         soundTypeMap.put(SoundType.LADDER, "LADDER");
         soundTypeMap.put(SoundType.ANVIL, "ANVIL");
-        soundTypeMap.put(SoundType.SLIME, "SLIME");
+        soundTypeMap.put(SoundType.SLIME_BLOCK, "SLIME_BLOCK");
+        soundTypeMap.put(SoundType.HONEY_BLOCK, "HONEY_BLOCK");
         soundTypeMap.put(SoundType.WET_GRASS, "WET_GRASS");
-        soundTypeMap.put(SoundType.CORAL, "CORAL");
+        soundTypeMap.put(SoundType.CORAL_BLOCK, "CORAL_BLOCK");
         soundTypeMap.put(SoundType.BAMBOO, "BAMBOO");
         soundTypeMap.put(SoundType.BAMBOO_SAPLING, "BAMBOO_SAPLING");
         soundTypeMap.put(SoundType.SCAFFOLDING, "SCAFFOLDING");
         soundTypeMap.put(SoundType.SWEET_BERRY_BUSH, "SWEET_BERRY_BUSH");
         soundTypeMap.put(SoundType.CROP, "CROP");
-        soundTypeMap.put(SoundType.STEM, "STEM");
+        soundTypeMap.put(SoundType.HARD_CROP, "HARD_CROP");
         soundTypeMap.put(SoundType.NETHER_WART, "NETHER_WART");
         soundTypeMap.put(SoundType.LANTERN, "LANTERN");
 

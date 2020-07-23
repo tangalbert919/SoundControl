@@ -72,7 +72,7 @@ public final class AudioEffectLibrary {
         // Occlusion setup
         materialOcclusion.defaultReturnValue(-1F);
         for (final Material mat : MaterialUtils.getMaterials())
-            materialOcclusion.put(mat, mat.isOpaque() ? 1F : 0.15F);
+            materialOcclusion.put(mat, mat.isSolidBlocking() ? 1F : 0.15F);
         blockStateOcclusionMap.setDefaultValue(() -> -1F);
 
         // Reflection setup
@@ -146,7 +146,7 @@ public final class AudioEffectLibrary {
         if (result == null || result < 0) {
             result = materialOcclusion.getFloat(state.getMaterial());
             if (result < 0) {
-                result = state.getMaterial().isOpaque() ? 1F : 0.15F;
+                result = state.getMaterial().isSolidBlocking() ? 1F : 0.15F;
             }
         }
 
@@ -181,8 +181,8 @@ public final class AudioEffectLibrary {
                 // Tag entry
                 final Tag<Block> tag = TagUtils.getBlockTag(name.substring(1));
                 if (tag != null) {
-                    for (final Block block : tag.getAllElements()) {
-                        for (final BlockState state : block.getStateContainer().getValidStates())
+                    for (final Block block : tag.getValues()) {
+                        for (final BlockState state : block.getStateDefinition().getPossibleStates())
                             blockStateOcclusionMap.put(state, kvp.getValue());
                     }
                 } else {
@@ -220,8 +220,8 @@ public final class AudioEffectLibrary {
                 // Tag entry
                 final Tag<Block> tag = TagUtils.getBlockTag(name.substring(1));
                 if (tag != null) {
-                    for (final Block block : tag.getAllElements()) {
-                        for (final BlockState state : block.getStateContainer().getValidStates())
+                    for (final Block block : tag.getValues()) {
+                        for (final BlockState state : block.getStateDefinition().getPossibleStates())
                             blockStateReflectMap.put(state, val);
                     }
                 } else {

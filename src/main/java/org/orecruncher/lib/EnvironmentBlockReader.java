@@ -42,9 +42,9 @@ import javax.annotation.Nullable;
  * cache the last chunk that was accessed in hopes of a subsequent hit.
  */
 @OnlyIn(Dist.CLIENT)
-public class EnvironmentBlockReader implements IEnviromentBlockReader {
+public class EnvironmentBlockReader implements IBlockReader {
 
-    private static final BlockState AIR = Blocks.AIR.getDefaultState();
+    private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
     protected final IWorld reader;
     protected final WorldLightManager lightManager;
@@ -57,16 +57,16 @@ public class EnvironmentBlockReader implements IEnviromentBlockReader {
 
     public EnvironmentBlockReader(@Nonnull final IWorld reader) {
         this.reader = reader;
-        this.lightManager = reader.getChunkProvider().func_212863_j_();
-        this.sky = this.lightManager.getLightEngine(LightType.SKY);
-        this.block = this.lightManager.getLightEngine(LightType.BLOCK);
+        this.lightManager = reader.getChunkSource().getLightEngine();
+        this.sky = this.lightManager.getLayerListener(LightType.SKY);
+        this.block = this.lightManager.getLayerListener(LightType.BLOCK);
     }
 
     public boolean needsUpdate(@Nonnull final IWorld world) {
         return this.reader != world;
     }
 
-    @Nonnull
+    /*@Nonnull
     @Override
     public Biome getBiome(@Nonnull final BlockPos pos) {
         final IChunk chunk = resolveChunk(pos);
@@ -87,12 +87,12 @@ public class EnvironmentBlockReader implements IEnviromentBlockReader {
             j = minLight;
         }
         return i << 20 | j << 4;
-    }
+    }*/
 
     @Nullable
     @Override
-    public TileEntity getTileEntity(@Nonnull final BlockPos pos) {
-        return this.reader.getTileEntity(pos);
+    public TileEntity getBlockEntity(@Nonnull final BlockPos pos) {
+        return this.reader.getBlockEntity(pos);
     }
 
     @Nonnull
@@ -126,7 +126,7 @@ public class EnvironmentBlockReader implements IEnviromentBlockReader {
 
     @Nullable
     protected IChunk resolveChunk(@Nonnull final BlockPos pos) {
-        if (!World.isValid(pos))
+        if (!World.isInWorldBounds(pos))
             return null;
 
         final int chunkX = pos.getX() >> 4;

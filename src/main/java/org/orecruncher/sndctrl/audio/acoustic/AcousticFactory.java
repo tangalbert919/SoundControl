@@ -95,9 +95,9 @@ public class AcousticFactory extends SoundBuilder implements IAcousticFactory {
     @Override
     @Nonnull
     public ISoundInstance createSoundNear(@Nonnull final Entity entity) {
-        final float posX = (float) (entity.posX + randomRange());
-        final float posY = (float) (entity.posY + entity.getEyeHeight() + randomRange());
-        final float posZ = (float) (entity.posZ + randomRange());
+        final float posX = (float) (entity.getX() + randomRange());
+        final float posY = (float) (entity.getY() + entity.getEyeHeight() + randomRange());
+        final float posZ = (float) (entity.getZ() + randomRange());
         final SoundInstance sound = makeSound();
         sound.setPosition(posX, posY, posZ);
         return sound;

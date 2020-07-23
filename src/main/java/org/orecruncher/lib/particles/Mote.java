@@ -18,12 +18,13 @@
 
 package org.orecruncher.lib.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
+import net.minecraft.world.LightType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.GameUtils;
@@ -34,13 +35,13 @@ import javax.annotation.Nonnull;
 public abstract class Mote implements IParticleMote {
 
     protected final IBlockReader world;
-    protected final IEnviromentBlockReader lighting;
+    protected final ILightReader lighting;
 
     protected boolean isAlive = true;
     protected double posX;
     protected double posY;
     protected double posZ;
-    protected final BlockPos.MutableBlockPos position = new BlockPos.MutableBlockPos();
+    protected final BlockPos.Mutable position = new BlockPos.Mutable();
 
     protected int slX16;
     protected int blX16;
@@ -52,7 +53,7 @@ public abstract class Mote implements IParticleMote {
 
     public Mote(@Nonnull final IBlockReader world, final double x, final double y, final double z) {
         this.world = world;
-        this.lighting = world instanceof IEnviromentBlockReader ? (IEnviromentBlockReader) world : GameUtils.getWorld();
+        this.lighting = GameUtils.getWorld();
         setPosition(x, y, z);
         configureColor();
     }
@@ -61,7 +62,7 @@ public abstract class Mote implements IParticleMote {
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
-        this.position.setPos(posX, posY, posZ);
+        this.position.set(posX, posY, posZ);
     }
 
     public void configureColor() {
@@ -103,46 +104,35 @@ public abstract class Mote implements IParticleMote {
         this.blX16 = combinedLight & 65535;
     }
 
-    protected final double interpX() {
-        return Particle.interpPosX;
-    }
-
-    protected final double interpY() {
-        return Particle.interpPosY;
-    }
-
-    protected final double interpZ() {
-        return Particle.interpPosZ;
-    }
-
     protected float renderX(final float partialTicks) {
-        return (float) (this.posX - interpX());
+        return (float) (this.posX);
     }
 
     protected float renderY(final float partialTicks) {
-        return (float) (this.posY - interpY());
+        return (float) (this.posY);
     }
 
     protected float renderZ(final float partialTicks) {
-        return (float) (this.posZ - interpZ());
+        return (float) (this.posZ);
     }
 
-    protected void drawVertex(final BufferBuilder buffer, final double x, final double y, final double z,
+    protected void drawVertex(final IVertexBuilder buffer, final double x, final double y, final double z,
                               final double u, final double v) {
         buffer
-                .pos(x, y, z)
-                .tex(u, v)
+                .vertex(x, y, z)
+                .uv((float) u, (float) v)
                 .color(this.red, this.green, this.blue, this.alpha)
-                .lightmap(this.slX16, this.blX16)
+                .uv2(this.slX16, this.blX16)
                 .endVertex();
     }
 
     @Override
-    public abstract void render(final BufferBuilder buffer, final ActiveRenderInfo info, float partialTicks, float rotX,
-                                float rotZ, float rotYZ, float rotXY, float rotXZ);
+    public abstract void render(final IVertexBuilder buffer, final ActiveRenderInfo info, float partialTicks);
 
     public int getBrightnessForRender(final float partialTicks) {
-        return this.lighting.getCombinedLight(this.position, 0);
+        int i = lighting.getBrightness(LightType.SKY, this.position);
+        int j = lighting.getBrightness(LightType.BLOCK, this.position);
+        return i << 20 | j << 4;
     }
 
 }

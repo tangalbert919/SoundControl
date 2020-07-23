@@ -55,7 +55,7 @@ public class WrappedSoundInstance implements ISoundInstance, ITickableSound {
     }
 
     @Override
-    public boolean isDonePlaying() {
+    public boolean isStopped() {
         return getState().isTerminal();
     }
 
@@ -88,14 +88,14 @@ public class WrappedSoundInstance implements ISoundInstance, ITickableSound {
 
     @Nonnull
     @Override
-    public ResourceLocation getSoundLocation() {
-        return this.sound.getSoundLocation();
+    public ResourceLocation getLocation() {
+        return this.sound.getLocation();
     }
 
     @Nullable
     @Override
-    public SoundEventAccessor createAccessor(SoundHandler handler) {
-        return this.sound.createAccessor(handler);
+    public SoundEventAccessor resolve(SoundHandler handler) {
+        return this.sound.resolve(handler);
     }
 
     @Nonnull
@@ -106,8 +106,8 @@ public class WrappedSoundInstance implements ISoundInstance, ITickableSound {
 
     @Nonnull
     @Override
-    public SoundCategory getCategory() {
-        return this.sound.getCategory();
+    public SoundCategory getSource() {
+        return this.sound.getSource();
     }
 
     @Nonnull
@@ -117,18 +117,18 @@ public class WrappedSoundInstance implements ISoundInstance, ITickableSound {
     }
 
     @Override
-    public boolean canRepeat() {
-        return this.sound.canRepeat();
+    public boolean isLooping() {
+        return this.sound.isLooping();
     }
 
     @Override
-    public boolean isGlobal() {
-        return this.sound.isGlobal();
+    public boolean isRelative() {
+        return this.sound.isRelative();
     }
 
     @Override
-    public int getRepeatDelay() {
-        return this.sound.getRepeatDelay();
+    public int getDelay() {
+        return this.sound.getDelay();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class WrappedSoundInstance implements ISoundInstance, ITickableSound {
 
     @Nonnull
     @Override
-    public AttenuationType getAttenuationType() {
-        return this.sound.getAttenuationType();
+    public AttenuationType getAttenuation() {
+        return this.sound.getAttenuation();
     }
 }

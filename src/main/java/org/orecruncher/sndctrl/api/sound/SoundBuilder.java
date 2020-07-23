@@ -101,7 +101,7 @@ public class SoundBuilder {
 
     @Nonnull
     public static SoundBuilder builder(@Nonnull final SoundEvent evt) {
-        return builder(evt, SoundLibrary.getSoundCategory(evt.getName(), Category.AMBIENT));
+        return builder(evt, SoundLibrary.getSoundCategory(evt.getLocation(), Category.AMBIENT));
     }
 
     @Nonnull
@@ -112,8 +112,8 @@ public class SoundBuilder {
     @Nonnull
     public static SoundBuilder builder(@Nonnull final SoundInstance proto) {
         Objects.requireNonNull(proto);
-        final SoundEvent se = SoundLibrary.getSound(proto.getSoundLocation()).orElseThrow(NullPointerException::new);
-        final ISoundCategory sc = Category.getCategory(proto.getCategory()).orElseThrow(NullPointerException::new);
+        final SoundEvent se = SoundLibrary.getSound(proto.getLocation()).orElseThrow(NullPointerException::new);
+        final ISoundCategory sc = Category.getCategory(proto.getSource()).orElseThrow(NullPointerException::new);
         return new SoundBuilder(se, sc).from(proto);
     }
 
@@ -139,12 +139,12 @@ public class SoundBuilder {
     public SoundBuilder from(@Nonnull final LocatableSound ps) {
         Objects.requireNonNull(ps);
 
-        this.soundCategory = Category.getCategory(ps.getCategory()).orElse(Category.MASTER);
+        this.soundCategory = Category.getCategory(ps.getSource()).orElse(Category.MASTER);
         this.position = new Vec3d(ps.getX(), ps.getY(), ps.getZ());
-        this.attenuation = ps.getAttenuationType();
-        this.global = ps.isGlobal();
-        this.repeatable = ps.canRepeat();
-        this.repeatDelayMin = this.repeatDelayMax = ps.getRepeatDelay();
+        this.attenuation = ps.getAttenuation();
+        this.global = ps.isRelative();
+        this.repeatable = ps.isLooping();
+        this.repeatDelayMin = this.repeatDelayMax = ps.getDelay();
 
         this.volumeMin = this.volumeMax = ps.volume;
         this.pitchMin = this.pitchMax = ps.pitch;
@@ -153,7 +153,7 @@ public class SoundBuilder {
 
     @Nonnull
     public ResourceLocation getResourceName() {
-        return this.soundEvent.getName();
+        return this.soundEvent.getLocation();
     }
 
     @Nonnull

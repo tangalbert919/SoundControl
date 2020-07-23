@@ -18,6 +18,7 @@
 
 package org.orecruncher.lib.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -54,7 +55,7 @@ final class ParticleCollection extends BaseParticle {
     ParticleCollection(@Nonnull final String name, @Nonnull final World world, @Nonnull final IParticleRenderType renderType) {
         super(world, 0, 0, 0);
 
-        this.canCollide = false;
+        this.hasPhysics = false;
         this.renderType = renderType;
         this.render = new LoggingTimerEMA("Render " + name);
         this.tick = new LoggingTimerEMA("Tick " + name);
@@ -87,7 +88,7 @@ final class ParticleCollection extends BaseParticle {
 
     public boolean shouldDie() {
         final boolean timeout = (TickCounter.getTickCount() - this.lastTickUpdate) > TICK_GRACE;
-        return timeout || size() == 0 || this.world != GameUtils.getWorld();
+        return timeout || size() == 0 || this.level != GameUtils.getWorld();
     }
 
     @Override
@@ -97,18 +98,17 @@ final class ParticleCollection extends BaseParticle {
             this.lastTickUpdate = TickCounter.getTickCount();
             this.myParticles.removeIf(UPDATE_REMOVE);
             if (shouldDie()) {
-                setExpired();
+                remove();
             }
         }
         this.tick.end();
     }
 
     @Override
-    public void renderParticle(@Nonnull final BufferBuilder buffer, @Nonnull final ActiveRenderInfo info, final float partialTicks,
-                               final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
+    public void render(@Nonnull final IVertexBuilder buffer, @Nonnull final ActiveRenderInfo info, final float partialTicks) {
         this.render.begin();
         for (final IParticleMote mote : this.myParticles)
-            mote.render(buffer, info, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+            mote.render(buffer, info, partialTicks);
         this.render.end();
     }
 

@@ -67,8 +67,8 @@ public class EntitySoundInstance extends WrappedSoundInstance {
     }
 
     @Override
-    public boolean isDonePlaying() {
-        return !this.entity.isAlive() || super.isDonePlaying();
+    public boolean isStopped() {
+        return !this.entity.isAlive() || super.isStopped();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class EntitySoundInstance extends WrappedSoundInstance {
 
         // If we are not done playing, and the sound is not global, we
         // update the sound's position.
-        if (!isDonePlaying() && !isGlobal()) {
+        if (!isStopped() && !isRelative()) {
             updatePosition();
         }
     }
@@ -106,9 +106,9 @@ public class EntitySoundInstance extends WrappedSoundInstance {
         //@formatter:off
         return MoreObjects.toStringHelper(this)
                 .addValue(this.entity.toString())
-                .addValue(getSoundLocation().toString())
-                .addValue(getCategory().toString())
-                .addValue(getAttenuationType().toString())
+                .addValue(getLocation().toString())
+                .addValue(getSoundCategory().toString())
+                .addValue(getAttenuation().toString())
                 .addValue(getState().toString())
                 .add("v", getVolume())
                 .add("p", getPitch())

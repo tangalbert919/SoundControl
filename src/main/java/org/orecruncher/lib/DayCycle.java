@@ -59,22 +59,22 @@ public enum DayCycle {
     }
 
     public static DayCycle getCycle(@Nonnull final IWorld world) {
-        if (world.getDimension().isNether() || !world.getDimension().hasSkyLight())
+        if (world.getDimension().isNaturalDimension() || !world.getDimension().isHasSkyLight())
             return DayCycle.NO_SKY;
 
-        final float brFactor = world.getDimension().getSunBrightness(1.0F);
+        final float brFactor = getSunBrightnessBody(1.0F, world);
         if (brFactor > 0.68F)   // 0.6F on 0-1 scale
             return DayCycle.DAYTIME;
         if (brFactor < 0.3F)    // 0 on 0-1 scale
             return DayCycle.NIGHTTIME;
-        final float angle = world.getCelestialAngle(0F);
+        final float angle = world.getTimeOfDay(0F);
         if (angle < 0.744F)
             return DayCycle.SUNSET;
         return DayCycle.SUNRISE;
     }
 
     public static float getMoonPhaseFactor(@Nonnull final IWorld world) {
-        return world.getCurrentMoonPhaseFactor();
+        return world.getMoonBrightness();
     }
 
     public static boolean isAuroraVisible(@Nonnull final IWorld world) {
@@ -87,6 +87,16 @@ public enum DayCycle {
 
     public boolean isAuroraVisible() {
         return this.auroraVisible;
+    }
+
+    public static float getSunBrightnessBody(float partialTicks, IWorld world) {
+        float f = world.getTimeOfDay(partialTicks);
+        float f1 = 1.0F - (MathStuff.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.2F);
+        f1 = MathStuff.clamp(f1, 0.0F, 1.0F);
+        f1 = 1.0F - f1;
+        f1 = (float)((double)f1 * (1.0D - (double)(world.getLevel().getRainLevel(partialTicks) * 5.0F) / 16.0D));
+        f1 = (float)((double)f1 * (1.0D - (double)(world.getLevel().getThunderLevel(partialTicks) * 5.0F) / 16.0D));
+        return f1 * 0.8F + 0.2F;
     }
 
     @OnlyIn(Dist.CLIENT)

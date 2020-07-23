@@ -40,7 +40,7 @@ public final class OpenGlState {
     private final int depthFunc;
 
     private final boolean cull;
-    private GlStateManager.CullFace cullMode;
+    private final int cullMode;
 
     private final boolean lighting;
     private final boolean depthMask;
@@ -74,17 +74,7 @@ public final class OpenGlState {
         this.depthFunc = getInteger(GL11.GL_DEPTH_FUNC);
 
         this.cull = isSet(GL11.GL_CULL_FACE);
-        switch (getInteger(GL11.GL_CULL_FACE_MODE)) {
-            case 1029:
-                this.cullMode = GlStateManager.CullFace.BACK;
-                break;
-            case 1032:
-                this.cullMode = GlStateManager.CullFace.FRONT_AND_BACK;
-                break;
-            case 1028:
-            default:
-                this.cullMode = GlStateManager.CullFace.FRONT;
-        }
+        this.cullMode = getInteger(GL11.GL_CULL_FACE_MODE);
 
         this.lighting = isSet(GL11.GL_LIGHTING);
         this.depthMask = isSet(GL11.GL_DEPTH_WRITEMASK);
@@ -92,7 +82,7 @@ public final class OpenGlState {
         this.rescaleNormal = isSet(GL12.GL_RESCALE_NORMAL);
         this.texture2D = isSet(GL11.GL_TEXTURE_2D);
 
-        GlStateManager.pushMatrix();
+        GlStateManager._pushMatrix();
     }
 
     public static OpenGlState push() {
@@ -100,54 +90,54 @@ public final class OpenGlState {
     }
 
     public static void pop(final OpenGlState state) {
-        GlStateManager.popMatrix();
+        GlStateManager._popMatrix();
 
         if (state.enableBlend)
-            GlStateManager.enableBlend();
+            GlStateManager._enableBlend();
         else
-            GlStateManager.disableBlend();
-        GlStateManager.blendFunc(state.blendSource, state.blendDest);
+            GlStateManager._disableBlend();
+        GlStateManager._blendFunc(state.blendSource, state.blendDest);
         //GlStateManager.blendEquation(state.blendEquation);
 
         if (state.enableAlphaTest)
-            GlStateManager.enableAlphaTest();
+            GlStateManager._enableAlphaTest();
         else
-            GlStateManager.disableAlphaTest();
-        GlStateManager.alphaFunc(state.alphaTestFunc, state.alphaTestRef);
+            GlStateManager._disableAlphaTest();
+        GlStateManager._alphaFunc(state.alphaTestFunc, state.alphaTestRef);
 
         if (state.depthTest)
-            GlStateManager.enableDepthTest();
+            GlStateManager._enableDepthTest();
         else
-            GlStateManager.disableDepthTest();
-        GlStateManager.depthFunc(state.depthFunc);
+            GlStateManager._disableDepthTest();
+        GlStateManager._depthFunc(state.depthFunc);
 
         if (state.cull)
-            GlStateManager.enableCull();
+            GlStateManager._enableCull();
         else
-            GlStateManager.disableCull();
-        GlStateManager.cullFace(state.cullMode);
+            GlStateManager._disableCull();
+        //GlStateManager.cullFace(state.cullMode);
 
         if (state.lighting)
-            GlStateManager.enableLighting();
+            GlStateManager._enableLighting();
         else
-            GlStateManager.disableLighting();
+            GlStateManager._disableLighting();
 
-        if (state.normal)
+        /*if (state.normal)
             GlStateManager.enableNormalize();
         else
-            GlStateManager.disableNormalize();
+            GlStateManager.disableNormalize();*/
 
         if (state.rescaleNormal)
-            GlStateManager.enableRescaleNormal();
+            GlStateManager._enableRescaleNormal();
         else
-            GlStateManager.disableRescaleNormal();
+            GlStateManager._disableRescaleNormal();
 
         if (state.texture2D)
-            GlStateManager.enableTexture();
+            GlStateManager._enableTexture();
         else
-            GlStateManager.disableTexture();
+            GlStateManager._disableTexture();
 
-        GlStateManager.depthMask(state.depthMask);
+        GlStateManager._depthMask(state.depthMask);
     }
 
 }

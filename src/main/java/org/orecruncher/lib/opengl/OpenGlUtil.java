@@ -29,7 +29,7 @@ public final class OpenGlUtil {
 
     }
 
-    public static void setStandardBlend() {
+    /*public static void setStandardBlend() {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     }
@@ -38,5 +38,5 @@ public final class OpenGlUtil {
         GlStateManager.enableBlend();
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.SRC_ALPHA,
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-    }
+    }*/
 }

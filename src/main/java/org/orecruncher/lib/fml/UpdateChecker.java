@@ -82,7 +82,7 @@ public final class UpdateChecker {
             return null;
         final String t = result.target != null ? result.target.toString() : "UNKNOWN";
         final String u = result.url != null ? result.url : "UNKNOWN";
-        return I18n.format(this.messageId, mod.get().getDisplayName(), t, u);
+        return I18n.get(this.messageId, mod.get().getDisplayName(), t, u);
     }
 
     private void playerLogin(@Nonnull final PlayerLoggedInEvent event) {

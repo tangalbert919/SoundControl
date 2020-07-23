@@ -40,9 +40,9 @@ public final class ClientWorldPatcher {
     public static void onWorldLoad(@Nonnull final WorldEvent.Load event) {
         if (Config.CLIENT.effects.get_fixupRandoms()) {
             final IWorld world = event.getWorld();
-            if (world.isRemote() && world instanceof World) {
+            if (world.isClientSide() && world instanceof World) {
                 final World w = (World) world;
-                w.rand = new XorShiftRandom();
+                w.random = new XorShiftRandom();
             }
         }
     }

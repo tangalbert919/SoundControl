@@ -42,7 +42,7 @@ public class BackgroundSoundInstance extends FadableSoundInstance {
     }
 
     @Override
-    public boolean isGlobal() {
+    public boolean isRelative() {
         return true;
     }
 
@@ -63,7 +63,7 @@ public class BackgroundSoundInstance extends FadableSoundInstance {
 
     @Nonnull
     @Override
-    public AttenuationType getAttenuationType() {
+    public AttenuationType getAttenuation() {
         return AttenuationType.NONE;
     }
 

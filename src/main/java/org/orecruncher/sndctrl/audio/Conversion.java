@@ -39,7 +39,7 @@ public final class Conversion {
      * @return An IAudioStream that is in mono format
      */
     public static IAudioStream convert(@Nonnull final IAudioStream inputStream) {
-        final AudioFormat format = inputStream.func_216454_a();
+        final AudioFormat format = inputStream.getFormat();
         if (format.getChannels() == 1)
             return inputStream;
 
@@ -54,7 +54,7 @@ public final class Conversion {
      */
     public static AudioStreamBuffer convert(@Nonnull final AudioStreamBuffer buffer) {
 
-        final AudioFormat format = buffer.field_216476_b;
+        final AudioFormat format = buffer.format;
 
         // If it is already mono return original buffer
         if (format.getChannels() == 1)
@@ -76,7 +76,7 @@ public final class Conversion {
                 format.getFrameRate(),
                 bigendian);
 
-        final ByteBuffer source = buffer.field_216475_a;
+        final ByteBuffer source = buffer.data;
         if (source == null) {
             return buffer;
         }
@@ -98,9 +98,9 @@ public final class Conversion {
             }
         }
         // Patch up the old object
-        buffer.field_216476_b = monoformat;
-        buffer.field_216475_a.rewind();
-        buffer.field_216475_a.limit(sourceLength >> 1);
+        buffer.format = monoformat;
+        buffer.data.rewind();
+        buffer.data.limit(sourceLength >> 1);
         return buffer;
     }
 
@@ -113,19 +113,19 @@ public final class Conversion {
         }
 
         @Override
-        public AudioFormat func_216454_a() {
-            return this.source.func_216454_a();
+        public AudioFormat getFormat() {
+            return this.source.getFormat();
         }
 
         @Override
-        public ByteBuffer func_216453_b() throws IOException {
-            return this.source.func_216453_b();
+        public ByteBuffer readAll() throws IOException {
+            return this.source.readAll();
         }
 
         @Nullable
         @Override
-        public ByteBuffer func_216455_a(int p_216455_1_) throws IOException {
-            return this.source.func_216455_a(p_216455_1_);
+        public ByteBuffer read(int p_216455_1_) throws IOException {
+            return this.source.read(p_216455_1_);
         }
 
         @Override

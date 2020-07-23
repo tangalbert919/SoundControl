@@ -85,7 +85,7 @@ public final class SoundEventHandling {
                 instance.noFade();
 
                 // Queue it up on the main client thread.
-                GameUtils.getMC().enqueue(() -> {
+                GameUtils.getMC().tell(() -> {
                     try {
                         AudioEngine.play(instance);
                     } catch (@Nonnull final Throwable t) {
@@ -104,7 +104,7 @@ public final class SoundEventHandling {
             return;
 
         if (handleMute()) {
-            final boolean active = GameUtils.getMC().isGameFocused();
+            final boolean active = GameUtils.getMC().isWindowActive();
             final boolean muted = isMuted();
             if (active && muted) {
                 setMuted(false);
@@ -117,7 +117,7 @@ public final class SoundEventHandling {
     }
 
     private static boolean handleMute() {
-        return Config.CLIENT.sound.get_muteInBackground() && GameUtils.getSoundHander().sndManager.loaded;
+        return Config.CLIENT.sound.get_muteInBackground() && GameUtils.getSoundHander().soundEngine.loaded;
     }
 
     private static boolean isMuted() {
@@ -130,7 +130,7 @@ public final class SoundEventHandling {
             listener.setGain(MUTE_VOLUME);
         } else {
             final GameSettings options = GameUtils.getGameSettings();
-            listener.setGain(options.getSoundLevel(SoundCategory.MASTER));
+            listener.setGain(options.getSoundSourceVolume(SoundCategory.MASTER));
         }
     }
 }

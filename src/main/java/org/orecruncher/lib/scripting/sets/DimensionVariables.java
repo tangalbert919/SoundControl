@@ -49,7 +49,7 @@ public class DimensionVariables extends VariableSet<IDimensionVariables> impleme
         if (GameUtils.isInGame()) {
             final Dimension dim = GameUtils.getWorld().getDimension();
             this.id = dim.getType().getId();
-            this.hasSky = dim.hasSkyLight();
+            this.hasSky = dim.isHasSkyLight();
             this.name = dim.getType().getRegistryName().toString();
         } else {
             this.id = 0;

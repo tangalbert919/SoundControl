@@ -145,7 +145,7 @@ public final class Category implements ISoundCategory {
 
         @Override
         public float getVolumeScale() {
-            return GameUtils.getGameSettings().getSoundLevel(this.category);
+            return GameUtils.getGameSettings().getSoundSourceVolume(this.category);
         }
 
         @Nonnull

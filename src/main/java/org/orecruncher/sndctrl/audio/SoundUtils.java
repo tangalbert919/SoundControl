@@ -60,9 +60,9 @@ public final class SoundUtils {
         for (final SoundCategory sc : SoundCategory.values())
             categoryMapper.put(sc.getName(), sc);
 
-        final SoundEngine engine = GameUtils.getSoundHander().sndManager;
-        playing = engine.playingSoundsChannel;
-        delayed = engine.delayedSounds;
+        final SoundEngine engine = GameUtils.getSoundHander().soundEngine;
+        playing = engine.instanceToChannel;
+        delayed = engine.queuedSounds;
         listener = engine.listener;
     }
 
@@ -114,7 +114,7 @@ public final class SoundUtils {
      */
     public static boolean isSoundVolumeBlocked(@Nonnull final ISound sound) {
         Objects.requireNonNull(sound);
-        return getMasterGain() <= 0F || (!sound.canBeSilent() && sound.getVolume() <= 0F);
+        return getMasterGain() <= 0F || (!sound.canStartSilent() && sound.getVolume() <= 0F);
     }
 
     /**
@@ -128,7 +128,7 @@ public final class SoundUtils {
     public static boolean inRange(@Nonnull final Vec3d listener, @Nonnull final ISound sound, final int pad) {
         int distSq = sound.getSound().getAttenuationDistance() + pad;
         distSq *= distSq;
-        return listener.squareDistanceTo(sound.getX(), sound.getY(), sound.getZ()) <= distSq;
+        return listener.distanceToSqr(sound.getX(), sound.getY(), sound.getZ()) <= distSq;
     }
 
     public static boolean inRange(@Nonnull final Vec3d listener, @Nonnull final ISound sound) {
@@ -152,17 +152,17 @@ public final class SoundUtils {
 
         //@formatter:off
         return MoreObjects.toStringHelper(sound)
-                .addValue(sound.getSoundLocation().toString())
-                .addValue(sound.getCategory().toString())
-                .addValue(sound.getAttenuationType().toString())
+                .addValue(sound.getLocation().toString())
+                .addValue(sound.getSource().toString())
+                .addValue(sound.getAttenuation().toString())
                 .add("v", sound.getVolume())
                 .add("p", sound.getPitch())
                 .add("x", sound.getX())
                 .add("y", sound.getY())
                 .add("z", sound.getZ())
                 .add("distance", sound.getSound().getAttenuationDistance())
-                .add("streaming", sound.getSound().isStreaming())
-                .add("global", sound.isGlobal())
+                .add("streaming", sound.getSound().shouldStream())
+                .add("global", sound.isRelative())
                 .toString();
         //@formatter:on
     }
@@ -177,7 +177,7 @@ public final class SoundUtils {
 
         try {
 
-            final long device = soundSystem.field_216411_b;
+            final long device = soundSystem.device;
 
             boolean hasFX = false;
             if (Config.CLIENT.sound.get_enableEnhancedSounds()) {

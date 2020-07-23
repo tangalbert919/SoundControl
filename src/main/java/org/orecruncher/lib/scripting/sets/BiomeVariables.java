@@ -37,12 +37,12 @@ public class BiomeVariables extends VariableSet<IBiomeVariables> implements IBio
     private final LazyVariable<Set<BiomeDictionary.Type>> biomeTraits = new LazyVariable<>(() -> BiomeDictionary.getTypes(this.biome));
     private final LazyVariable<Set<String>> biomeTraitNames = new LazyVariable<>(() -> this.biomeTraits.get().stream().map(BiomeDictionary.Type::getName).collect(Collectors.toSet()));
     private final LazyVariable<String> traits = new LazyVariable<>(() -> String.join(" ", this.biomeTraitNames.get()));
-    private final LazyVariable<String> name = new LazyVariable<>(() -> this.biome.getDisplayName().getFormattedText());
+    private final LazyVariable<String> name = new LazyVariable<>(() -> this.biome.getName().getColoredString());
     private final LazyVariable<String> modid = new LazyVariable<>(() -> this.biome.getRegistryName().getNamespace());
     private final LazyVariable<String> id = new LazyVariable<>(() -> this.biome.getRegistryName().toString());
-    private final LazyVariable<String> category = new LazyVariable<>(() -> this.biome.getCategory().getName());
+    private final LazyVariable<String> category = new LazyVariable<>(() -> this.biome.getBiomeCategory().getName());
     private final LazyVariable<String> rainType = new LazyVariable<>(() -> this.biome.getPrecipitation().getName());
-    private final LazyVariable<String> temp = new LazyVariable<>(() -> this.biome.getTempCategory().getName());
+    private final LazyVariable<String> temp = new LazyVariable<>(() -> this.biome.getTemperatureCategory().getName());
 
     public BiomeVariables() {
         super("biome");
@@ -66,7 +66,7 @@ public class BiomeVariables extends VariableSet<IBiomeVariables> implements IBio
     public void update() {
         Biome newBiome = null;
         if (GameUtils.isInGame()) {
-            newBiome = GameUtils.getWorld().getBiome(GameUtils.getPlayer().getPosition());
+            newBiome = GameUtils.getWorld().getBiome(GameUtils.getPlayer().getCommandSenderBlockPosition());
         } else {
             newBiome = Biomes.PLAINS;
         }
@@ -108,7 +108,7 @@ public class BiomeVariables extends VariableSet<IBiomeVariables> implements IBio
 
     @Override
     public float getTemperature() {
-        return this.biome.getDefaultTemperature();
+        return this.biome.getTemperature();
     }
 
     @Override

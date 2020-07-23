@@ -66,7 +66,7 @@ public final class SoundLibrary {
 
         // Initializes the internal sound registry once all the other mods have
         // registered their sounds.
-        ForgeRegistries.SOUND_EVENTS.forEach(se -> myRegistry.put(se.getName(), se));
+        ForgeRegistries.SOUND_EVENTS.forEach(se -> myRegistry.put(se.getLocation(), se));
 
         // Gather up resource pack sound files and process them to ensure meta data is collected
         // and we become aware of configured sounds.  Resource pack sounds generally replace existing

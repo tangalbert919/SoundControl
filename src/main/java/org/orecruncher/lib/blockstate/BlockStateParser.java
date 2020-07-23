@@ -82,7 +82,7 @@ public final class BlockStateParser {
             }
         }
 
-        if (!ResourceLocation.isResouceNameValid(temp)) {
+        if (!ResourceLocation.isValidResourceLocation(temp)) {
             LOGGER.warn("Invalid blockname '%s' for entry '%s'", temp, blockName);
             return Optional.empty();
         }

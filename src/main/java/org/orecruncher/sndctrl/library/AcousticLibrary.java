@@ -61,7 +61,7 @@ public final class AcousticLibrary {
         for (final Map.Entry<ResourceLocation, SoundEvent> kvp : sounds.entrySet()) {
             if (!compiled.containsKey(kvp.getKey().toString())) {
                 final Optional<SoundEvent> evt = SoundLibrary.getSound(kvp.getKey());
-                evt.ifPresent(e -> addAcoustic(e.getName(), new SimpleAcoustic(e)));
+                evt.ifPresent(e -> addAcoustic(e.getLocation(), new SimpleAcoustic(e)));
             }
         }
     }
@@ -184,7 +184,7 @@ public final class AcousticLibrary {
 
     @Nonnull
     private static IAcoustic generateAcoustic(@Nonnull final SoundEvent evt) {
-        IAcoustic result = compiled.get(evt.getName().toString());
+        IAcoustic result = compiled.get(evt.getLocation().toString());
         if (result == null) {
             result = new SimpleAcoustic(evt);
             addAcoustic(result.getName(), result);

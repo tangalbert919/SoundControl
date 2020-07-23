@@ -20,11 +20,14 @@ package org.orecruncher.lib.particles;
 
 import javax.annotation.Nonnull;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -158,33 +161,31 @@ public abstract class AnimatedMote extends MotionMote {
 	}
 
 	@Override
-	public void render(final BufferBuilder buffer, final ActiveRenderInfo info, float partialTicks, float rotX,
-					   float rotZ, float rotYZ, float rotXY, float rotXZ) {
-
+	public void render(final IVertexBuilder buffer, final ActiveRenderInfo info, float partialTicks) {
 		final double x = renderX(partialTicks);
 		final double y = renderY(partialTicks);
 		final double z = renderZ(partialTicks);
 
-		drawVertex(buffer, x + (-rotX * this.particleScale - rotXY * this.particleScale),
-				y + (-rotZ * this.particleScale),
-				z + (-rotYZ * this.particleScale - rotXZ * this.particleScale), this.texU2, this.texV2);
-		drawVertex(buffer, x + (-rotX * this.particleScale + rotXY * this.particleScale),
-				y + (rotZ * this.particleScale),
-				z + (-rotYZ * this.particleScale + rotXZ * this.particleScale), this.texU2, this.texV1);
-		drawVertex(buffer, x + (rotX * this.particleScale + rotXY * this.particleScale),
-				y + (rotZ * this.particleScale),
-				z + (rotYZ * this.particleScale + rotXZ * this.particleScale), this.texU1, this.texV1);
-		drawVertex(buffer, x + (rotX * this.particleScale - rotXY * this.particleScale),
-				y + (-rotZ * this.particleScale),
-				z + (rotYZ * this.particleScale - rotXZ * this.particleScale), this.texU1, this.texV2);
+		drawVertex(buffer, x,
+				y,
+				z, this.texU2, this.texV2);
+		drawVertex(buffer, x,
+				y,
+				z, this.texU2, this.texV1);
+		drawVertex(buffer, x,
+				y,
+				z, this.texU1, this.texV1);
+		drawVertex(buffer, x,
+				y,
+				z, this.texU1, this.texV2);
 	}
 
 	public void setParticleTexture() {
 		final TextureAtlasSprite texture = this.sprites.get(this.age, this.maxAge);
-		this.texU1 = texture.getMinU();
-		this.texU2 = texture.getMaxU();
-		this.texV1 = texture.getMinV();
-		this.texV2 = texture.getMaxV();
+		this.texU1 = texture.getU0();
+		this.texU2 = texture.getU1();
+		this.texV1 = texture.getV0();
+		this.texV2 = texture.getV1();
 	}
 
 }

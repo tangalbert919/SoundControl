@@ -32,11 +32,11 @@ package org.orecruncher.sndctrl.audio.handlers;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.lib.EnvironmentBlockReader;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.math.BlockRayTrace;
 import org.orecruncher.lib.math.MathStuff;
@@ -102,7 +102,7 @@ public final class SoundFXUtils {
 
         // Would have been cool to have a direction vec as a 3d as well as 3i.
         for (final Direction d : Direction.values())
-            SURFACE_DIRECTION_NORMALS[d.ordinal()] = new Vec3d(d.getDirectionVec());
+            SURFACE_DIRECTION_NORMALS[d.ordinal()] = new Vec3d(d.getNormal());
 
         // Pre-calculate the known vectors that will be projected off a sound source when casting about to establish
         // reverb effects.
@@ -175,12 +175,12 @@ public final class SoundFXUtils {
                 continue;
 
             // Additional bounces
-            BlockPos lastHitBlock = rayHit.getPos();
-            Vec3d lastHitPos = rayHit.getHitVec();
-            Vec3d lastHitNormal = surfaceNormal(rayHit.getFace());
+            BlockPos lastHitBlock = rayHit.getBlockPos();
+            Vec3d lastHitPos = rayHit.getLocation();
+            Vec3d lastHitNormal = surfaceNormal(rayHit.getDirection());
             Vec3d lastRayDir = REVERB_RAY_NORMALS[i];
 
-            double totalRayDistance = origin.distanceTo(rayHit.getHitVec());
+            double totalRayDistance = origin.distanceTo(rayHit.getLocation());
 
             // Secondary ray bounces
             for (int j = 0; j < REVERB_RAY_BOUNCES; j++) {
@@ -199,12 +199,12 @@ public final class SoundFXUtils {
                 } else {
 
                     bounceRatio[j] += blockReflectivity;
-                    totalRayDistance += lastHitPos.distanceTo(rayHit.getHitVec());
+                    totalRayDistance += lastHitPos.distanceTo(rayHit.getLocation());
 
-                    lastHitPos = rayHit.getHitVec();
-                    lastHitNormal = surfaceNormal(rayHit.getFace());
+                    lastHitPos = rayHit.getLocation();
+                    lastHitNormal = surfaceNormal(rayHit.getDirection());
                     lastRayDir = newRayDir;
-                    lastHitBlock = rayHit.getPos();
+                    lastHitBlock = rayHit.getBlockPos();
 
                     // Cast a ray back at the player.  If it is a miss there is a path back from the reflection
                     // point to the player meaning they share the same airspace.
@@ -338,7 +338,7 @@ public final class SoundFXUtils {
             final Iterator<BlockRayTraceResult> itr = new RayTraceIterator(traceContext);
             for (int i = 0; i < OCCLUSION_RAYS; i++) {
                 if (itr.hasNext()) {
-                    final BlockState state = ctx.world.getBlockState(itr.next().getPos());
+                    final BlockState state = ctx.world.getBlockState(itr.next().getBlockPos());
                     accum += AudioEffectLibrary.getOcclusion(state);
                 } else {
                     break;
@@ -378,7 +378,7 @@ public final class SoundFXUtils {
         return SURFACE_DIRECTION_NORMALS[d.ordinal()];
     }
 
-    private static Vec3d offsetPositionIfSolid(@Nonnull final IEnviromentBlockReader world, @Nonnull final Vec3d origin, @Nonnull final Vec3d target) {
+    private static Vec3d offsetPositionIfSolid(@Nonnull final EnvironmentBlockReader world, @Nonnull final Vec3d origin, @Nonnull final Vec3d target) {
         if (WorldUtils.isAirBlock(world, new BlockPos(origin))) {
             return MathStuff.addScaled(origin, MathStuff.normalize(origin, target), 0.876F);
         }
@@ -394,6 +394,6 @@ public final class SoundFXUtils {
     }
 
     private static boolean inRange(@Nonnull final Vec3d origin, @Nonnull final Vec3d target, final double distance) {
-        return distance > 0 && origin.squareDistanceTo(target) <= (distance * distance);
+        return distance > 0 && origin.distanceToSqr(target) <= (distance * distance);
     }
 }

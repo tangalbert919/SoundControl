@@ -211,7 +211,7 @@ public final class AcousticCompiler {
 
         final ResourceLocation res = resolveResource(sound, null);
         final SoundEvent evt = SoundLibrary.getSound(res).orElseThrow(IllegalStateException::new);
-        final ISoundCategory cat = SoundLibrary.getSoundCategory(evt.getName(), Category.AMBIENT);
+        final ISoundCategory cat = SoundLibrary.getSoundCategory(evt.getLocation(), Category.AMBIENT);
         return Optional.of(new SimpleAcoustic(res, new AcousticFactory(evt, cat)));
     }
 

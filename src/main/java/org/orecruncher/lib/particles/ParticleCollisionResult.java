@@ -43,6 +43,6 @@ public final class ParticleCollisionResult {
         this.position = pos;
         this.state = state;
         this.onGround = onGround;
-        this.fluidState = fluid != null ? fluid : Fluids.EMPTY.getDefaultState();
+        this.fluidState = fluid != null ? fluid : Fluids.EMPTY.defaultFluidState();
     }
 }

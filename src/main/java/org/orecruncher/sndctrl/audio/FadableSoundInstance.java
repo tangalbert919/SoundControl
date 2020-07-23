@@ -60,8 +60,8 @@ public class FadableSoundInstance extends WrappedSoundInstance implements IFadab
     }
 
     @Override
-    public boolean isDonePlaying() {
-        return this.isDonePlaying || super.isDonePlaying();
+    public boolean isStopped() {
+        return this.isDonePlaying || super.isStopped();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class FadableSoundInstance extends WrappedSoundInstance implements IFadab
         super.tick();
 
         // If we are done playing just return
-        if (isDonePlaying())
+        if (isStopped())
             return;
 
         // Update our last tick amount
@@ -127,7 +127,7 @@ public class FadableSoundInstance extends WrappedSoundInstance implements IFadab
     @Nonnull
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .addValue(getSoundLocation().toString())
+                .addValue(getLocation().toString())
                 .addValue(getSoundCategory().toString())
                 .addValue(getState().toString())
                 .add("v", getVolume())

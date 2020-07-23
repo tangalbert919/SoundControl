@@ -76,8 +76,8 @@ public final class SoundVolumeEvaluator {
         }
 
         // Master category already controlled by master gain so ignore
-        final SoundCategory category = sound.getCategory();
-        return category == SoundCategory.MASTER ? 1F : GameUtils.getGameSettings().getSoundLevel(category);
+        final SoundCategory category = sound.getSource();
+        return category == SoundCategory.MASTER ? 1F : GameUtils.getGameSettings().getSoundSourceVolume(category);
     }
 
     /**

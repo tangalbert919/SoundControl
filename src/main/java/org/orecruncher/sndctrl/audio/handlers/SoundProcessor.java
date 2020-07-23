@@ -67,7 +67,7 @@ public final class SoundProcessor {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onConfigChange(@Nonnull final ModConfig.ConfigReloading configEvent) {
+    public static void onConfigChange(@Nonnull final ModConfig.Reloading configEvent) {
         applyConfig();
     }
 
@@ -115,7 +115,7 @@ public final class SoundProcessor {
     }
 
     public static float getVolumeScale(@Nonnull final ISound sound) {
-        return getVolumeScale(Objects.requireNonNull(sound).getSoundLocation());
+        return getVolumeScale(Objects.requireNonNull(sound).getLocation());
     }
 
     private static boolean isSoundCulledLogical(@Nonnull final ResourceLocation sound) {
@@ -153,7 +153,7 @@ public final class SoundProcessor {
             return;
 
         // Check to see if we need to block sound processing
-        final ResourceLocation soundResource = theSound.getSoundLocation();
+        final ResourceLocation soundResource = theSound.getLocation();
         if (blockSoundProcess(soundResource)) {
             e.setResultSound(null);
         }

@@ -47,7 +47,7 @@ public class SimpleAcoustic implements IAcoustic {
     private final ResourceLocation name;
 
     public SimpleAcoustic(@Nonnull final SoundEvent event) {
-        this(event.getName(), event);
+        this(event.getLocation(), event);
     }
 
     public SimpleAcoustic(@Nonnull final ResourceLocation name, @Nonnull final SoundEvent evt) {
